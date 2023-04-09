@@ -5,6 +5,26 @@ use piston_window::*;
 use rand::{thread_rng, Rng};
 use std::time::Instant;
 
+struct Fruit {
+    x: f64,
+    y: f64,
+}
+
+impl Fruit {
+    fn new() -> Fruit {
+        Fruit { x: 200.0, y: 200.0 }
+    }
+
+    fn draw(&self, context: Context, graphics: &mut G2d) {
+        ellipse(
+            [1.0, 0.0, 0.0, 1.0], // vermelho
+            [self.x, self.y, 10.0, 10.0],
+            context.transform,
+            graphics,
+        );
+    }
+}
+
 #[derive(PartialEq)]
 enum Direction {
     Up,
@@ -36,50 +56,30 @@ impl Snake {
             );
         }
     }
-}
 
-struct Fruit {
-    x: f64,
-    y: f64,
-}
+    fn update_snake(&mut self, width: f64, height: f64) {
+        let mut new_head = self.body[0];
+        match self.direction {
+            Direction::Up => new_head[1] -= 10.0,
+            Direction::Down => new_head[1] += 10.0,
+            Direction::Left => new_head[0] -= 10.0,
+            Direction::Right => new_head[0] += 10.0,
+        }
+        // Check if the snake's head goes beyond the edge of the window
+        if new_head[0] < 0.0 {
+            new_head[0] = width - 10.0;
+        } else if new_head[0] > width - 10.0 {
+            new_head[0] = 0.0;
+        }
+        if new_head[1] < 0.0 {
+            new_head[1] = height - 10.0;
+        } else if new_head[1] > height - 10.0 {
+            new_head[1] = 0.0;
+        }
 
-impl Fruit {
-    fn new() -> Fruit {
-        Fruit { x: 200.0, y: 200.0 }
+        self.body.pop();
+        self.body.insert(0, new_head);
     }
-
-    fn draw(&self, context: Context, graphics: &mut G2d) {
-        ellipse(
-            [1.0, 0.0, 0.0, 1.0], // vermelho
-            [self.x, self.y, 10.0, 10.0],
-            context.transform,
-            graphics,
-        );
-    }
-}
-
-fn update_snake(snake: &mut Snake, width: f64, height: f64) {
-    let mut new_head = snake.body[0];
-    match snake.direction {
-        Direction::Up => new_head[1] -= 10.0,
-        Direction::Down => new_head[1] += 10.0,
-        Direction::Left => new_head[0] -= 10.0,
-        Direction::Right => new_head[0] += 10.0,
-    }
-    // Check if the snake's head goes beyond the edge of the window
-    if new_head[0] < 0.0 {
-        new_head[0] = width - 10.0;
-    } else if new_head[0] > width - 10.0 {
-        new_head[0] = 0.0;
-    }
-    if new_head[1] < 0.0 {
-        new_head[1] = height - 10.0;
-    } else if new_head[1] > height - 10.0 {
-        new_head[1] = 0.0;
-    }
-
-    snake.body.pop();
-    snake.body.insert(0, new_head);
 }
 
 fn check_collision(snake_head: [f64; 2], fruit: &Fruit) -> bool {
@@ -144,7 +144,7 @@ fn main() {
         let now = Instant::now();
         let delta_time = now.duration_since(last_update_time);
         if delta_time.as_secs_f64() > 0.1 {
-            update_snake(&mut snake, 600.0, 600.0);
+            snake.update_snake(600.0, 600.0);
             last_update_time = now;
         }
 

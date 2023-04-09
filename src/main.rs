@@ -3,8 +3,7 @@ extern crate rand;
 
 use piston_window::*;
 use rand::{thread_rng, Rng};
-use std::thread;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 #[derive(PartialEq)]
 enum Direction {
@@ -109,7 +108,6 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut events = Events::new(EventSettings::new());
     let mut last_update_time = Instant::now();
 
     let mut score = 0;

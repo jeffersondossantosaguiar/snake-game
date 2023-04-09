@@ -50,6 +50,7 @@ fn main() {
         }
 
         if snake.check_body_collision() {
+            score = 0;
             snake.body.truncate(3);
         }
 

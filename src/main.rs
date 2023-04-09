@@ -22,9 +22,34 @@ fn main() {
     let mut last_update_time = Instant::now();
 
     let mut score = 0;
-    let mut glyphs = window.load_font("assets/FiraSans-Regular.ttf").unwrap();
+    let mut glyphs = window.load_font("assets/VT323-Regular.ttf").unwrap();
+
+    let mut game_started = false;
 
     while let Some(event) = window.next() {
+        if !game_started {
+            window.draw_2d(&event, |context, graphics, device| {
+                clear([1.0; 4], graphics);
+                text::Text::new_color([0.0, 0.0, 0.0, 1.0], 16)
+                    .draw(
+                        &format!("Press Enter to Play!"),
+                        &mut glyphs,
+                        &context.draw_state,
+                        context.transform.trans(120.0, 200.0),
+                        graphics,
+                    )
+                    .unwrap();
+                glyphs.factory.encoder.flush(device);
+            });
+
+            if let Some(Button::Keyboard(key)) = event.press_args() {
+                if key == Key::Return {
+                    game_started = true;
+                }
+            }
+            continue;
+        }
+
         if let Some(Button::Keyboard(key)) = event.press_args() {
             let current_direction = snake.direction;
 

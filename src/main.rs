@@ -60,20 +60,21 @@ fn main() {
             last_update_time = now;
         }
 
-        window.draw_2d(&event, |context, graphics, _| {
+        window.draw_2d(&event, |context, graphics, device| {
             clear([1.0; 4], graphics);
             snake.draw(context, graphics);
             fruit.draw(context, graphics);
 
-            text::Text::new_color([0.0, 0.0, 0.0, 1.0], 24)
+            text::Text::new_color([0.0, 0.0, 0.0, 1.0], 16)
                 .draw(
                     &format!("Score: {}", score),
                     &mut glyphs,
                     &context.draw_state,
-                    context.transform.trans(500.0, 50.0),
+                    context.transform.trans(300.0, 370.0),
                     graphics,
                 )
                 .unwrap();
+            glyphs.factory.encoder.flush(device);
         });
     }
 }

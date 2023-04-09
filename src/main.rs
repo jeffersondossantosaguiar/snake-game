@@ -80,22 +80,25 @@ impl Snake {
         self.body.pop();
         self.body.insert(0, new_head);
     }
-}
 
-fn check_collision(snake_head: [f64; 2], fruit: &Fruit) -> bool {
-    let dx = snake_head[0] - fruit.x;
-    let dy = snake_head[1] - fruit.y;
-    let distance = (dx * dx + dy * dy).sqrt();
-    distance < 10.0
-}
-
-fn check_body_collision(snake_head: [f64; 2], snake_body: &Vec<[f64; 2]>) -> bool {
-    for body_part in snake_body {
-        if snake_head == *body_part {
-            return true;
-        }
+    fn check_collision(&self, fruit: &Fruit) -> bool {
+        let snake_head: [f64; 2] = self.body[0];
+        let dx = snake_head[0] - fruit.x;
+        let dy = snake_head[1] - fruit.y;
+        let distance = (dx * dx + dy * dy).sqrt();
+        distance < 10.0
     }
-    false
+
+    fn check_body_collision(&self) -> bool {
+        let snake_head: [f64; 2] = self.body[0];
+
+        for body_part in self.body[1..].to_vec() {
+            if snake_head == body_part {
+                return true;
+            }
+        }
+        false
+    }
 }
 
 fn main() {
@@ -129,7 +132,7 @@ fn main() {
             };
         }
 
-        if check_collision(snake.body[0], &fruit) {
+        if snake.check_collision(&fruit) {
             let mut rng = thread_rng();
             fruit.x = rng.gen_range(0..60) as f64 * 10.0;
             fruit.y = rng.gen_range(0..60) as f64 * 10.0;
@@ -137,7 +140,7 @@ fn main() {
             score += 1;
         }
 
-        if check_body_collision(snake.body[0], &snake.body[1..].to_vec()) {
+        if snake.check_body_collision() {
             snake.body.truncate(3);
         }
 

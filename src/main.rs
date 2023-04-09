@@ -19,6 +19,15 @@ struct Snake {
     direction: Direction,
 }
 
+impl Snake {
+    fn new() -> Snake {
+        Snake {
+            body: vec![[50.0, 50.0], [60.0, 50.0], [70.0, 50.0]],
+            direction: Direction::Right,
+        }
+    }
+}
+
 struct Fruit {
     x: f64,
     y: f64,
@@ -85,10 +94,7 @@ fn draw_fruit(fruit: &Fruit, context: Context, graphics: &mut G2d) {
 }
 
 fn main() {
-    let mut snake = Snake {
-        body: vec![[50.0, 50.0], [60.0, 50.0], [70.0, 50.0]],
-        direction: Direction::Right,
-    };
+    let mut snake = Snake::new();
 
     let mut fruit = Fruit { x: 200.0, y: 200.0 };
 

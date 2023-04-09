@@ -1,29 +1,12 @@
 extern crate piston_window;
 extern crate rand;
 
+mod fruit;
+
+use fruit::Fruit;
 use piston_window::*;
 use rand::{thread_rng, Rng};
 use std::time::Instant;
-
-struct Fruit {
-    x: f64,
-    y: f64,
-}
-
-impl Fruit {
-    fn new() -> Fruit {
-        Fruit { x: 200.0, y: 200.0 }
-    }
-
-    fn draw(&self, context: Context, graphics: &mut G2d) {
-        ellipse(
-            [1.0, 0.0, 0.0, 1.0], // vermelho
-            [self.x, self.y, 10.0, 10.0],
-            context.transform,
-            graphics,
-        );
-    }
-}
 
 #[derive(PartialEq)]
 enum Direction {

@@ -36,6 +36,15 @@ impl Fruit {
     fn new() -> Fruit {
         Fruit { x: 200.0, y: 200.0 }
     }
+
+    fn draw(&self, context: Context, graphics: &mut G2d) {
+        ellipse(
+            [1.0, 0.0, 0.0, 1.0], // vermelho
+            [self.x, self.y, 10.0, 10.0],
+            context.transform,
+            graphics,
+        );
+    }
 }
 
 fn draw_snake(snake: &Snake, context: Context, graphics: &mut G2d) {
@@ -89,18 +98,8 @@ fn check_body_collision(snake_head: [f64; 2], snake_body: &Vec<[f64; 2]>) -> boo
     false
 }
 
-fn draw_fruit(fruit: &Fruit, context: Context, graphics: &mut G2d) {
-    ellipse(
-        [1.0, 0.0, 0.0, 1.0], // vermelho
-        [fruit.x, fruit.y, 10.0, 10.0],
-        context.transform,
-        graphics,
-    );
-}
-
 fn main() {
     let mut snake = Snake::new();
-
     let mut fruit = Fruit::new();
 
     let mut window: PistonWindow = WindowSettings::new("Snake Game", [600, 600])
@@ -152,7 +151,7 @@ fn main() {
         window.draw_2d(&event, |context, graphics, _| {
             clear([1.0; 4], graphics);
             draw_snake(&snake, context, graphics);
-            draw_fruit(&fruit, context, graphics);
+            fruit.draw(context, graphics);
 
             text::Text::new_color([0.0, 0.0, 0.0, 1.0], 24)
                 .draw(

@@ -33,6 +33,12 @@ struct Fruit {
     y: f64,
 }
 
+impl Fruit {
+    fn new() -> Fruit {
+        Fruit { x: 200.0, y: 200.0 }
+    }
+}
+
 fn draw_snake(snake: &Snake, context: Context, graphics: &mut G2d) {
     for body_part in &snake.body {
         rectangle(
@@ -96,7 +102,7 @@ fn draw_fruit(fruit: &Fruit, context: Context, graphics: &mut G2d) {
 fn main() {
     let mut snake = Snake::new();
 
-    let mut fruit = Fruit { x: 200.0, y: 200.0 };
+    let mut fruit = Fruit::new();
 
     let mut window: PistonWindow = WindowSettings::new("Snake Game", [600, 600])
         .exit_on_esc(true)

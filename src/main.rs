@@ -14,7 +14,7 @@ fn main() {
     let mut snake = Snake::new();
     let mut fruit = Fruit::new();
 
-    let mut window: PistonWindow = WindowSettings::new("Snake Game", [600, 600])
+    let mut window: PistonWindow = WindowSettings::new("Snake Game", [400, 400])
         .exit_on_esc(true)
         .build()
         .unwrap();
@@ -43,8 +43,8 @@ fn main() {
 
         if snake.check_collision(&fruit) {
             let mut rng = thread_rng();
-            fruit.x = rng.gen_range(0..60) as f64 * 10.0;
-            fruit.y = rng.gen_range(0..60) as f64 * 10.0;
+            fruit.x = rng.gen_range(0..40) as f64 * 10.0;
+            fruit.y = rng.gen_range(0..40) as f64 * 10.0;
             snake.body.push(snake.body[snake.body.len() - 1]);
             score += 1;
         }
@@ -56,7 +56,7 @@ fn main() {
         let now = Instant::now();
         let delta_time = now.duration_since(last_update_time);
         if delta_time.as_secs_f64() > 0.1 {
-            snake.update_snake(600.0, 600.0);
+            snake.update_snake(400.0, 400.0);
             last_update_time = now;
         }
 

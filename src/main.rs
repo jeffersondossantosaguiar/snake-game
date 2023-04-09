@@ -25,6 +25,17 @@ impl Snake {
             direction: Direction::Right,
         }
     }
+
+    fn draw(&self, context: Context, graphics: &mut G2d) {
+        for body_part in &self.body {
+            rectangle(
+                [0.0, 1.0, 0.0, 1.0], // verde
+                [body_part[0], body_part[1], 10.0, 10.0],
+                context.transform,
+                graphics,
+            );
+        }
+    }
 }
 
 struct Fruit {
@@ -41,17 +52,6 @@ impl Fruit {
         ellipse(
             [1.0, 0.0, 0.0, 1.0], // vermelho
             [self.x, self.y, 10.0, 10.0],
-            context.transform,
-            graphics,
-        );
-    }
-}
-
-fn draw_snake(snake: &Snake, context: Context, graphics: &mut G2d) {
-    for body_part in &snake.body {
-        rectangle(
-            [0.0, 1.0, 0.0, 1.0], // verde
-            [body_part[0], body_part[1], 10.0, 10.0],
             context.transform,
             graphics,
         );
@@ -150,7 +150,7 @@ fn main() {
 
         window.draw_2d(&event, |context, graphics, _| {
             clear([1.0; 4], graphics);
-            draw_snake(&snake, context, graphics);
+            snake.draw(context, graphics);
             fruit.draw(context, graphics);
 
             text::Text::new_color([0.0, 0.0, 0.0, 1.0], 24)
